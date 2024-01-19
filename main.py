@@ -6,6 +6,17 @@ import numpy as np
 import pandas as pd
 from PIL import Image, ImageTk, ImageDraw
 import csv
+def _onKeyRelease(event):
+    ctrl = (event.state & 0x4) != 0
+    if event.keycode == 88 and ctrl and event.keysym.lower() != "x":
+        event.widget.event_generate("<<Cut>>")
+
+    if event.keycode == 86 and ctrl and event.keysym.lower() != "v":
+        event.widget.event_generate("<<Paste>>")
+
+    if event.keycode == 67 and ctrl and event.keysym.lower() != "c":
+        event.widget.event_generate("<<Copy>>")
+
 class ImageLabelingApp:
     def __init__(self, root):
         self.root = root
@@ -98,5 +109,6 @@ class ImageLabelingApp:
 if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("600x850")
+    root.bind_all("<Key>", _onKeyRelease, "+")
     app = ImageLabelingApp(root)
     root.mainloop()
